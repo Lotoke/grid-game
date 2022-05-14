@@ -3,9 +3,9 @@
 }
 
 .button {
-  background-color: #4CAF50; 
+  background-color: #4caf50;
 }
-.box{
+.box {
   display: inline-block;
   width: 32px;
   height: 32px;
@@ -34,6 +34,21 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+.box {
+  display: flex;
+  background-color: grey;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 40px;
+}
+.gridBoard {
+  display: grid;
+  grid-template-columns: repeat(5, 45px);
+  grid-template-rows: repeat(10, 45px);
+  grid-gap: 0;
+  align-self: flex-start;
 }
 
 .App-link {

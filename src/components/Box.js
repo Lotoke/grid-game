@@ -1,19 +1,13 @@
 import * as math from "mathjs";
-
-function Box() {
+import "../App";
+function Box(props) {
   //let box = document.createElement('div');
-  
-  return(
-<div style ={styles.box}></div>
-  );
-}
 
-const styles = {
-box:{
-  backgroundColor: 'blue',
-  height:40,
-  width:40
-}
+  return (
+    <div className="box">
+      <div>{props.val}</div>
+    </div>
+  );
 }
 
 export default Box;
