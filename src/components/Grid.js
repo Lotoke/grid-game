@@ -14,7 +14,9 @@ export default function Grid(props) {
     for (let col = 0; col < 5; col++) {
       grid[row].push(
         <Box
+          selectionStatus={"unselectedBox"}
           key={`${col}${row}`}
+          index={`${col}${row}`}
           val={Math.floor(Math.random() * (11 - 1) + 1)}
         />
       );
