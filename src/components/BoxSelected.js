@@ -9,12 +9,12 @@ function Box(props) {
   const [boxColour, setBoxColour] = useState(props.status);
 
   const onClickEvent = () => {
-    setBoxColour("selectedBox");
+    //setBoxColour("selectedBox");
     props.changeSelectionState(props.index);
   };
 
   return (
-    <div onClick={onClickEvent} className={boxColour}>
+    <div onClick={onClickEvent} className={"selectedBox"}>
       <div>{props.val}</div>
     </div>
   );
