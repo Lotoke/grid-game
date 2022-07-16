@@ -1,4 +1,3 @@
-import { toBePartiallyChecked } from "@testing-library/jest-dom/dist/matchers";
 import * as math from "mathjs";
 import { useState } from "react";
 import "../App";
@@ -10,12 +9,12 @@ function Box(props) {
   const [boxColour, setBoxColour] = useState(props.status);
 
   const onClickEvent = () => {
-    setBoxColour("selectedBox");
+    //setBoxColour("selectedBox");
     props.changeSelectionState(props.index);
   };
 
   return (
-    <div onClick={onClickEvent} className={boxColour}>
+    <div onClick={onClickEvent} className={"selectedBox"}>
       <div>{props.val}</div>
     </div>
   );
