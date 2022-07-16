@@ -36,6 +36,16 @@
   color: white;
 }
 
+.grid-board {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(6, 40px);
+  grid-template-rows: repeat(10, 40px);
+  grid-gap: 5px;
+  align-self: flex-start;
+}
+
 .App-link {
   color: #61dafb;
 }
