@@ -1,16 +1,26 @@
 import Matrix from "./components/Matrix";
 import Box from "./components/Box"
 import Grid from "./components/Grid"
+import Counter from "./components/Counter"
 import './App.css';
+import {useState} from 'react';
 function App() {
+  const [boxCount, setBoxCount] = useState(50);
+  var count = 50;
+
+  const updateCounter = (val) => {
+    count = count -val;
+    setBoxCount(count);
+  }
   return (
     <div>
-      <h1>Button Test</h1>
+      
       <div>
         <button className= 'button' onClick={Matrix}>test</button>
+        <Counter counter= {boxCount} />
       </div>
       <div>
-      <Grid/>
+      <Grid updateCounter= {updateCounter} boxCount={boxCount}/>
       </div>
     </div>
   );

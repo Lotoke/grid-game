@@ -18,15 +18,16 @@ export default function Grid(props) {
 
   var tempGrid = [];
   var changed = false;
+  
 
   const changeSelectionState = (index,val) => {
     //console.log(boxStatus.slice());
     //console.log(boxStatus);
     //let grid2 = [...grid];
     //var grid3 = structuredClone(boxStatus);
-
+    console.log(props.boxCount)
     var tempGrid = cloneDeep(grid);
-
+    if (props.boxCount > 0){
     for (let row = 0; row < 10; row++) {
       for (let col = 0; col < 5; col++) {
         if (`${row}${col}` == index) {
@@ -38,9 +39,11 @@ export default function Grid(props) {
               index={`${row}${col}`}
               val={tempGrid[row][col].props.val}
               changeSelectionState={changeSelectionState}
-            />
-            
+            /> 
           );
+          props.updateCounter(tempGrid[row][col].props.val);
+          if (col+1 < 5) {
+          if (tempGrid[row][col+1].props.status != "selectedBox") {
           tempGrid[row][col+1] = (
             <BoxRevealed
               status={"selectedBox"}
@@ -50,6 +53,10 @@ export default function Grid(props) {
               changeSelectionState={changeSelectionState}
             />
           );
+        }
+      }   
+          if (col-1> -1){
+          if (tempGrid[row][col-1].props.status != "selectedBox") {
           tempGrid[row][col-1] = (
             <BoxRevealed
               status={"selectedBox"}
@@ -59,17 +66,23 @@ export default function Grid(props) {
               changeSelectionState={changeSelectionState}
             />
           );
-
+          }
+        }
+          if (row +1 <10){
+          if (tempGrid[row+1][col].props.status != "selectedBox") {
           tempGrid[row+1][col] = (
             <BoxRevealed
               status={"selectedBox"}
               key={`${row+1}${col}`}
               index={`${row+1}${col}`}
-              val={tempGrid[row][col].props.val}
+              val={tempGrid[row+1][col].props.val}
               changeSelectionState={changeSelectionState}
             />
           );
-
+          }
+        }
+          if (row-1 > -1) {
+          if (tempGrid[row-1][col].props.status != "selectedBox" ) {
           tempGrid[row-1][col] = (
             <BoxRevealed
               status={"selectedBox"}
@@ -79,13 +92,15 @@ export default function Grid(props) {
               changeSelectionState={changeSelectionState}
             />
           );
-          
+          }
+        }
         }
       }
     }
-
+  }
     grid = tempGrid;
     setBoxStatus(tempGrid);
+    
     //console.log(grid3);
     // The components generated in makeGrid are rendered in div.grid-board
   };
