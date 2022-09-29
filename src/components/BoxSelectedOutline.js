@@ -4,7 +4,7 @@ import "../App";
 import Grid from "./Grid";
 import GridUpdater from "./GridUpdater";
 
-function Box(props) {
+function BoxSelectedOutline(props) {
   //let box = document.createElement('div');
   const [boxColour, setBoxColour] = useState(props.status);
 
@@ -14,10 +14,10 @@ function Box(props) {
   };
 
   return (
-    <div className={"selectedBox"}>
+    <div className={"selectedBoxOutline"}>
       <div>{props.val}</div>
     </div>
   );
 }
 
-export default Box;
+export default BoxSelectedOutline;
