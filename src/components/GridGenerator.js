@@ -1,13 +1,23 @@
 import { useState } from "react";
 
-function GridGenerator(props) {
+function GridGenerator() {
   var grid = [];
-  for (let row = 0; row < 10; row++) {
-    grid.push([]);
-    for (let col = 0; col < 5; col++) {
-      grid[row].push(Math.floor(Math.random() * (11 - 1) + 1));
+  var sum = 0;
+
+  while (sum !== 200) {
+    grid = [];
+    sum = 0;
+
+    for (let row = 0; row < 10; row++) {
+      grid.push([]);
+      for (let col = 0; col < 5; col++) {
+        let randomNum = Math.floor(Math.random() * 10);
+        grid[row].push(randomNum);
+        sum += randomNum;
+      }
     }
   }
+
   return grid;
 }
 

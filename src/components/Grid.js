@@ -27,46 +27,6 @@ export default function Grid(props) {
     var chooseSelectedBox = false;
     var surroundingBoxes = [];
 
-    // for (let tempRow = row - 1; tempRow <= row + 1; tempRow++) {
-    //   if (
-    //     tempGrid[tempRow][col].props.status == "selectedBox" ||
-    //     tempGrid[tempRow][col].props.status == "selectedBoxOutline"
-    //   ) {
-    //     surroundingBoxes.push(tempGrid[tempRow][col]);
-    //   }
-    // }
-
-    // for (let tempCol = col - 1; tempCol <= col + 1; tempCol++) {
-    //   if (tempCol > 0 && tempCol < 4) {
-    //     if (
-    //       tempGrid[row][tempCol].props.status == "selectedBox" ||
-    //       tempGrid[row][tempCol].props.status == "selectedBoxOutline"
-    //     ) {
-    //       surroundingBoxes.push(tempGrid[row][tempCol]);
-    //     }
-    //   }
-    // }
-
-    // for (let i = 0; i < surroundingBoxes.length; i++) {
-    //   if (surroundingBoxes[i].props.status == "selectedBox") {
-    //     chooseSelectedBox = true;
-
-    //     surroundingBoxes.splice(i, i + 1);
-    //   }
-    // }
-    // if (chooseSelectedBox) {
-    //   tempGrid[row][col] = (
-    //     <BoxSelected
-    //       status={"selectedBox"}
-    //       key={`${row}${col}`}
-    //       index={`${row}${col}`}
-    //       val={tempGrid[row][col].props.val}
-    //       changeSelectionState={changeSelectionState}
-    //     />
-    //   );
-    // }
-
-    // if (chooseSelectedBox == false) {
     tempGrid[row][col] = (
       <BoxSelectedOutline
         status={"selectedBoxOutline"}
@@ -85,17 +45,8 @@ export default function Grid(props) {
         changeSelectionState={changeSelectionState}
       />
     );
-    //}
+
     updateBoxes(tempGrid, boxOutlineArray);
-    // tempGrid[row][col] = (
-    //   <BoxSelected
-    //     status={"selectedBox"}
-    //     key={`${row}${col}`}
-    //     index={`${row}${col}`}
-    //     val={tempGrid[row][col].props.val}
-    //     changeSelectionState={changeSelectionState}
-    //   />
-    // );
   };
   const updateBoxes = (tempGrid, boxOutlineArray) => {
     var boxChanged = true;
@@ -115,15 +66,17 @@ export default function Grid(props) {
         selectedFound = false;
         for (var tempRow2 = tempRow - 1; tempRow2 < tempRow + 2; tempRow2++) {
           if (tempGrid[tempRow2][tempCol].props.status == "selectedBox") {
+            console.log(tempGrid[tempRow2][tempCol].props.status);
             boxChanged = true;
 
             tempGrid[tempRow][tempCol] = (
               <BoxSelected
-                status={"selectedBox"}
+                status={tempGrid[tempRow2][tempCol].props.status}
                 key={`${tempRow}${tempCol}`}
                 index={`${tempRow}${tempCol}`}
                 val={tempGrid[tempRow][tempCol].props.val}
                 changeSelectionState={changeSelectionState}
+                origin={tempGrid[tempRow2][tempCol].props.origin}
               />
             );
             selectedFound = true;
@@ -142,11 +95,12 @@ export default function Grid(props) {
 
                 tempGrid[tempRow][tempCol] = (
                   <BoxSelected
-                    status={"selectedBox"}
+                    status={tempGrid[tempRow][tempCol2].props.status}
                     key={`${tempRow}${tempCol}`}
                     index={`${tempRow}${tempCol}`}
                     val={tempGrid[tempRow][tempCol].props.val}
                     changeSelectionState={changeSelectionState}
+                    origin={tempGrid[tempRow][tempCol2].props.origin}
                   />
                 );
 
@@ -167,7 +121,7 @@ export default function Grid(props) {
     //console.log(boxStatus);
     //let grid2 = [...grid];
     //var grid3 = structuredClone(boxStatus);
-
+    var linked = false;
     var newGrid = GridGenerator();
     var colCount = 0;
     var colCountArray = [];
@@ -182,11 +136,18 @@ export default function Grid(props) {
     props.rowSum(colCountArray);
 
     var tempGrid = cloneDeep(grid);
-    if (props.boxCount > 0) {
+    if (props.boxCount >= 0) {
       for (let row = 0; row < 10; row++) {
         for (let col = 0; col < 5; col++) {
           if (`${row}${col}` == index) {
             if (row < 1 || row > 8) {
+              var boxOrigin;
+              if (row < 1) {
+                boxOrigin = 1;
+              } else {
+                boxOrigin = 2;
+              }
+
               tempGrid[row][col] = (
                 <BoxSelected
                   status={"selectedBox"}
@@ -194,6 +155,7 @@ export default function Grid(props) {
                   index={`${row}${col}`}
                   val={tempGrid[row][col].props.val}
                   changeSelectionState={changeSelectionState}
+                  origin={boxOrigin}
                 />
               );
               updateBoxes(tempGrid, boxOutlineArray);
@@ -235,6 +197,13 @@ export default function Grid(props) {
                     changeSelectionState={changeSelectionState}
                   />
                 );
+              } else {
+                if (
+                  tempGrid[row][col + 1].props.origin !=
+                  tempGrid[row][col].props.origin
+                ) {
+                  linked = true;
+                }
               }
             }
             if (col - 1 > -1) {
@@ -251,6 +220,13 @@ export default function Grid(props) {
                     changeSelectionState={changeSelectionState}
                   />
                 );
+              } else {
+                if (
+                  tempGrid[row][col - 1].props.origin !=
+                  tempGrid[row][col].props.origin
+                ) {
+                  linked = true;
+                }
               }
             }
             if (row + 1 < 10) {
@@ -267,6 +243,13 @@ export default function Grid(props) {
                     changeSelectionState={changeSelectionState}
                   />
                 );
+              } else {
+                if (
+                  tempGrid[row + 1][col].props.origin !=
+                  tempGrid[row][col].props.origin
+                ) {
+                  linked = true;
+                }
               }
             }
             if (row - 1 > -1) {
@@ -283,6 +266,13 @@ export default function Grid(props) {
                     changeSelectionState={changeSelectionState}
                   />
                 );
+              } else {
+                if (
+                  tempGrid[row - 1][col].props.origin !=
+                  tempGrid[row][col].props.origin
+                ) {
+                  linked = true;
+                }
               }
             }
           }
@@ -291,6 +281,9 @@ export default function Grid(props) {
     }
     grid = tempGrid;
     setBoxStatus(tempGrid);
+    if (linked == true) {
+      props.endGame();
+    }
 
     //console.log(grid3);
     // The components generated in makeGrid are rendered in div.grid-board

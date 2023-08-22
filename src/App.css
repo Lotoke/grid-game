@@ -117,11 +117,52 @@
 }
 .mainContent {
   display: flex;
+
+  margin-top: 15px;
+}
+.mainContentDisabled {
+  pointer-events: none;
+  opacity: 0.7;
+  display: flex;
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 15px;
 }
+.endGameStats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 30%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust to center the modal properly */
+  width: 30%;
+  height: 30%;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
 
+.closeButton {
+  position: absolute; /* Position the button absolutely within the modal content */
+  top: 10px;
+  right: 10px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.heading2 {
+  font-size: larger;
+  align-self: top;
+}
 .grid-board {
   display: grid;
   justify-content: center;
