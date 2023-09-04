@@ -8,20 +8,18 @@ import { useState, useEffect } from "react";
 
 import ReactModal from "react-modal";
 function App() {
-  const saveStateToLocalStorage = (state) => {
+  const saveStateToLocalStorage = (ref, state) => {
     try {
       const serializedState = JSON.stringify(state);
-      localStorage.setItem("appState", serializedState);
-      console.log("test");
+      localStorage.setItem(ref, serializedState);
     } catch (error) {
       // Handle errors
     }
   };
 
-  const loadStateFromLocalStorage = () => {
+  const loadStateFromLocalStorage = (ref) => {
     try {
-      console.log("test");
-      const serializedState = localStorage.getItem("appState");
+      const serializedState = localStorage.getItem(ref);
       if (serializedState === null) {
         return undefined;
       }
@@ -31,20 +29,22 @@ function App() {
     }
   };
 
-  const [boxCount, setBoxCount] = useState(loadStateFromLocalStorage());
+  const [boxCount, setBoxCount] = useState(0);
   const [newRowSum, setNewRowSum] = useState([]);
   const [gameFinished, setGameFinished] = useState(false);
   const [gameStatModalStatus, setGameStatModalStatus] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [bestScore, setBestScore] = useState(0);
   const [averageScore, setAverageScore] = useState(0);
+
   //var newRowSum;
   var count = 0;
+  var loaded = false;
 
   const updateCounter = (val) => {
     count = count + val;
     setBoxCount(count);
-    saveStateToLocalStorage(count);
+    saveStateToLocalStorage("score", count);
   };
   const getRowSum = (rowSum) => {
     //setNewRowSum(rowSum);
@@ -56,7 +56,6 @@ function App() {
     submitScore();
     fetchBestScore();
     fetchAverageScore();
-    saveStateToLocalStorage();
   };
 
   const openModal = () => {
@@ -94,7 +93,6 @@ function App() {
     } catch (error) {
       console.error("Error fetching highest score:", error);
     }
-    return bestScore;
   };
 
   const fetchBestScore = async () => {
@@ -106,12 +104,15 @@ function App() {
     } catch (error) {
       console.error("Error fetching highest score:", error);
     }
-    return bestScore;
   };
 
   useEffect(() => {
-    fetchBestScore();
+    if (loadStateFromLocalStorage("score") != undefined) {
+      count = loadStateFromLocalStorage("score");
+      setBoxCount(count);
+    }
     fetchAverageScore();
+    fetchBestScore();
   });
 
   return (

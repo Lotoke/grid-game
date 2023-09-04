@@ -15,13 +15,113 @@ import { e } from "mathjs";
 
 export default function Grid(props) {
   // generates an array of 18 rows, each containing 10 GridSquares.
+
+  const saveStateToLocalStorage = (ref, state) => {
+    try {
+      const serializedState = JSON.stringify(state);
+      localStorage.setItem(ref, serializedState);
+    } catch (error) {
+      // Handle errors
+    }
+  };
+
+  const loadStateFromLocalStorage = (ref) => {
+    try {
+      const serializedState = localStorage.getItem(ref);
+      if (serializedState === null) {
+        return undefined;
+      }
+      return JSON.parse(serializedState);
+    } catch (error) {
+      return undefined;
+    }
+  };
+
   const [boxStatus, setBoxStatus] = useState([]);
   const [tempBoxStatus, setTempBoxStatus] = useState([]);
   var grid = [];
-
+  var loaded = false;
+  var boxLoaded = false;
   var tempGrid = [];
   var changed = false;
   var boxOutlineArray = [];
+
+  const recreateGrid = (gridIn, gridOut) => {
+    for (let row = 0; row < 10; row++) {
+      gridOut.push([]);
+      for (let col = 0; col < 5; col++) {
+        if (gridIn[row][col].props.status == "revealedBox") {
+          gridOut[row].push(
+            <BoxRevealed
+              status={gridIn[row][col].props.status}
+              key={gridIn[row][col].props.index}
+              index={gridIn[row][col].props.index}
+              //val={Math.floor(Math.random() * (11 - 1) + 1)}
+              val={gridIn[row][col].props.val}
+              changeSelectionState={changeSelectionState}
+            />
+          );
+        }
+        if (gridIn[row][col].props.status == "selectedBox") {
+          gridOut[row].push(
+            <BoxSelected
+              status={gridIn[row][col].props.status}
+              key={gridIn[row][col].props.index}
+              index={gridIn[row][col].props.index}
+              //val={Math.floor(Math.random() * (11 - 1) + 1)}
+              val={gridIn[row][col].props.val}
+              changeSelectionState={changeSelectionState}
+              origin={gridIn[row][col].props.origin}
+            />
+          );
+        }
+
+        if (gridIn[row][col].props.status == "selectedBoxOutline") {
+          gridOut[row].push(
+            <BoxSelectedOutline
+              status={gridIn[row][col].props.status}
+              key={gridIn[row][col].props.index}
+              index={gridIn[row][col].props.index}
+              //val={Math.floor(Math.random() * (11 - 1) + 1)}
+              val={gridIn[row][col].props.val}
+              changeSelectionState={changeSelectionState}
+            />
+          );
+        }
+
+        if (gridIn[row][col].props.status == "hiddenBox") {
+          gridOut[row].push(
+            <HiddenBox
+              status={gridIn[row][col].props.status}
+              key={gridIn[row][col].props.index}
+              index={gridIn[row][col].props.index}
+              //val={Math.floor(Math.random() * (11 - 1) + 1)}
+              val={gridIn[row][col].props.val}
+              changeSelectionState={changeSelectionState}
+            />
+          );
+        }
+      }
+    }
+    return gridOut;
+  };
+  const recreateBoxOutlineArray = (arrayIn) => {
+    var arrayOut = [];
+
+    for (var i in arrayIn) {
+      arrayOut.push(
+        <BoxSelectedOutline
+          status={arrayIn[i].props.status}
+          key={arrayIn[i].props.index}
+          index={arrayIn[i].props.index}
+          val={arrayIn[i].props.val}
+          changeSelectionState={changeSelectionState}
+        />
+      );
+    }
+
+    return arrayOut;
+  };
 
   const chooseNextBox = (row, col, tempGrid) => {
     var chooseSelectedBox = false;
@@ -54,19 +154,18 @@ export default function Grid(props) {
     var tempCol;
     var x = 0;
     var selectedFound;
+    var tempBoxOutlineArray = loadStateFromLocalStorage("boxOutlineArray");
 
     while (boxChanged) {
       boxChanged = false;
       x = x + 1;
 
       for (var i = 0; i < boxOutlineArray.length; i++) {
-        console.log(i);
         tempRow = parseInt(boxOutlineArray[i].props.index[0]);
         tempCol = parseInt(boxOutlineArray[i].props.index[1]);
         selectedFound = false;
         for (var tempRow2 = tempRow - 1; tempRow2 < tempRow + 2; tempRow2++) {
           if (tempGrid[tempRow2][tempCol].props.status == "selectedBox") {
-            console.log(tempGrid[tempRow2][tempCol].props.status);
             boxChanged = true;
 
             tempGrid[tempRow][tempCol] = (
@@ -79,6 +178,7 @@ export default function Grid(props) {
                 origin={tempGrid[tempRow2][tempCol].props.origin}
               />
             );
+
             selectedFound = true;
 
             boxOutlineArray.splice(i, 1);
@@ -114,28 +214,45 @@ export default function Grid(props) {
         //console.log(boxOutlineArray);
       }
     }
-    console.log(boxOutlineArray);
+
+    boxLoaded = true;
+    saveStateToLocalStorage("boxOutlineArray", boxOutlineArray);
   };
   const changeSelectionState = (index, val) => {
     //console.log(boxStatus.slice());
     //console.log(boxStatus);
     //let grid2 = [...grid];
-    //var grid3 = structuredClone(boxStatus);
+    //var gridIn[row][col] = structuredClone(boxStatus);
     var linked = false;
     var newGrid = GridGenerator();
     var colCount = 0;
     var colCountArray = [];
+    var tempGrid;
+    var loadedGrid2 = [];
+    var tempLoadedGrid2 = loadStateFromLocalStorage("grid");
+    tempGrid = cloneDeep(grid);
+
+    if (
+      tempLoadedGrid2 != [] &&
+      tempLoadedGrid2 != undefined &&
+      loaded == false
+    ) {
+      loadedGrid2 = recreateGrid(tempLoadedGrid2, loadedGrid2);
+      tempGrid = loadedGrid2;
+      loaded = true;
+    }
+
     for (let row = 0; row < 10; row++) {
       colCount = 0;
       for (let col = 0; col < 5; col++) {
-        colCount = colCount + grid[row][col].props.val;
+        colCount = colCount + tempGrid[row][col].props.val;
       }
       colCountArray.push(colCount);
     }
 
     props.rowSum(colCountArray);
+    saveStateToLocalStorage("colCount", colCountArray);
 
-    var tempGrid = cloneDeep(grid);
     if (props.boxCount >= 0) {
       for (let row = 0; row < 10; row++) {
         for (let col = 0; col < 5; col++) {
@@ -158,6 +275,7 @@ export default function Grid(props) {
                   origin={boxOrigin}
                 />
               );
+
               updateBoxes(tempGrid, boxOutlineArray);
             } else {
               tempGrid[row][col] = (
@@ -280,12 +398,15 @@ export default function Grid(props) {
       }
     }
     grid = tempGrid;
+
     setBoxStatus(tempGrid);
+    saveStateToLocalStorage("grid", tempGrid);
     if (linked == true) {
       props.endGame();
+      localStorage.clear();
     }
 
-    //console.log(grid3);
+    //console.log(gridIn[row][col]);
     // The components generated in makeGrid are rendered in div.grid-board
   };
 
@@ -293,12 +414,15 @@ export default function Grid(props) {
     var newGrid = GridGenerator();
     var colCount = 0;
     var colCountArray = [];
+    var loadedGrid = [];
+    var tempLoadedGrid = loadStateFromLocalStorage("grid");
+
     for (let row = 0; row < 10; row++) {
       grid.push([]);
       for (let col = 0; col < 5; col++) {
         grid[row].push(
           <HiddenBox
-            status={"unselectedBox"}
+            status={"hiddenBox"}
             key={`${row}${col}`}
             index={`${row}${col}`}
             //val={Math.floor(Math.random() * (11 - 1) + 1)}
@@ -308,8 +432,18 @@ export default function Grid(props) {
         );
       }
     }
-
-    setBoxStatus(grid);
+    if (tempLoadedGrid != [] && tempLoadedGrid != undefined) {
+      loadedGrid = recreateGrid(tempLoadedGrid, loadedGrid);
+      boxOutlineArray = recreateBoxOutlineArray(
+        loadStateFromLocalStorage("boxOutlineArray")
+      );
+      setBoxStatus(loadedGrid);
+      props.rowSum(loadStateFromLocalStorage("colCount"));
+    } else {
+      setBoxStatus(grid);
+      //console.log(grid[0][0]);
+      //console.log  gridOut);
+    }
   }, []);
 
   return <div className="gridBoard">{boxStatus}</div>;
