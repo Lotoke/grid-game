@@ -46,6 +46,16 @@ export default function Grid(props) {
   var changed = false;
   var boxOutlineArray = [];
 
+  const fetchGeneratedGrid = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/api/gridGen");
+      const data = await response.json();
+      console.log("grid:", data.grid2);
+      return data.grid2;
+    } catch (error) {
+      console.error("Error fetching grid:", error);
+    }
+  };
   const recreateGrid = (gridIn, gridOut) => {
     for (let row = 0; row < 10; row++) {
       gridOut.push([]);
@@ -411,39 +421,46 @@ export default function Grid(props) {
   };
 
   useEffect(() => {
-    var newGrid = GridGenerator();
+    var newGrid = [];
     var colCount = 0;
     var colCountArray = [];
     var loadedGrid = [];
     var tempLoadedGrid = loadStateFromLocalStorage("grid");
 
-    for (let row = 0; row < 10; row++) {
-      grid.push([]);
-      for (let col = 0; col < 5; col++) {
-        grid[row].push(
-          <HiddenBox
-            status={"hiddenBox"}
-            key={`${row}${col}`}
-            index={`${row}${col}`}
-            //val={Math.floor(Math.random() * (11 - 1) + 1)}
-            val={newGrid[row][col]}
-            changeSelectionState={changeSelectionState}
-          />
-        );
+    fetchGeneratedGrid().then((gridData) => {
+      // Now you can work with gridData
+      newGrid = [gridData];
+      console.log("t");
+
+      console.log(newGrid);
+      for (let row = 0; row < 10; row++) {
+        grid.push([]);
+        for (let col = 0; col < 5; col++) {
+          grid[row].push(
+            <HiddenBox
+              status={"hiddenBox"}
+              key={`${row}${col}`}
+              index={`${row}${col}`}
+              //val={Math.floor(Math.random() * (11 - 1) + 1)}
+              val={newGrid[0][row][col]}
+              changeSelectionState={changeSelectionState}
+            />
+          );
+        }
       }
-    }
-    if (tempLoadedGrid != [] && tempLoadedGrid != undefined) {
-      loadedGrid = recreateGrid(tempLoadedGrid, loadedGrid);
-      boxOutlineArray = recreateBoxOutlineArray(
-        loadStateFromLocalStorage("boxOutlineArray")
-      );
-      setBoxStatus(loadedGrid);
-      props.rowSum(loadStateFromLocalStorage("colCount"));
-    } else {
-      setBoxStatus(grid);
-      //console.log(grid[0][0]);
-      //console.log  gridOut);
-    }
+      if (tempLoadedGrid != [] && tempLoadedGrid != undefined) {
+        loadedGrid = recreateGrid(tempLoadedGrid, loadedGrid);
+        boxOutlineArray = recreateBoxOutlineArray(
+          loadStateFromLocalStorage("boxOutlineArray")
+        );
+        setBoxStatus(loadedGrid);
+        props.rowSum(loadStateFromLocalStorage("colCount"));
+      } else {
+        setBoxStatus(grid);
+        //console.log(grid[0][0]);
+        //console.log  gridOut);
+      }
+    });
   }, []);
 
   return <div className="gridBoard">{boxStatus}</div>;
