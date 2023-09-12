@@ -5,7 +5,8 @@ import Counter from "./components/Counter";
 import "./App.css";
 import RowCount from "./components/RowCount";
 import { useState, useEffect } from "react";
-
+import BounceElement from "./components/bounce";
+import TopNavBar from "./components/TopNavBar";
 import ReactModal from "react-modal";
 function App() {
   const saveStateToLocalStorage = (ref, state) => {
@@ -37,9 +38,20 @@ function App() {
   const [bestScore, setBestScore] = useState(0);
   const [averageScore, setAverageScore] = useState(0);
 
+  const [isBouncing, setIsBouncing] = useState(false);
+
   //var newRowSum;
   var count = 0;
   var loaded = false;
+
+  const handleBounceEffect = () => {
+    setIsBouncing(true);
+
+    // Remove the bounce class after the animation is complete
+    // setTimeout(() => {
+    //setIsBouncing(false);
+    // }, 600); // 0.6 seconds, which matches the animation duration
+  };
 
   const updateCounter = (val) => {
     count = count + val;
@@ -59,7 +71,11 @@ function App() {
   };
 
   const openModal = () => {
-    setGameStatModalStatus(true);
+    handleBounceEffect();
+
+    setTimeout(() => {
+      setGameStatModalStatus(true);
+    }, 1100); // 0.6 seconds, which matches the animation duration
   };
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -117,45 +133,62 @@ function App() {
 
   return (
     <div className="main">
-      <Counter counter={boxCount} />
-      <div>Daily Average {averageScore} </div>
-      <div>Daily Best: {bestScore}</div>
-
-      <ReactModal className="endGameStats" isOpen={gameStatModalStatus}>
-        <div>
-          <div className="heading2">Puzzle Complete!</div>
-
-          <button className="closeButton" onClick={() => closeModal()}>
-            &times;
-          </button>
-          <Counter counter={boxCount} />
-          <div> Daily Average Score {averageScore}</div>
-          <div> Daily Best Score: {bestScore}</div>
-          <form>
-            <label>
-              Name:
-              <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-              />
-              <button onClick={() => closeModal()}>Submit</button>
-            </label>
-          </form>
+      <div>
+        <TopNavBar />
+      </div>
+      <div>
+        <ReactModal className="endGameStats" isOpen={gameStatModalStatus}>
+          <div>
+            <button className="closeButton" onClick={() => closeModal()}>
+              &times;
+            </button>
+            <Counter counter={boxCount} />
+            <div> Daily Average Score {averageScore}</div>
+            <div> Daily Best Score: {bestScore}</div>
+            <form>
+              <label>
+                Name:
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                />
+                <button onClick={() => closeModal()}>Submit</button>
+              </label>
+            </form>
+          </div>
+        </ReactModal>
+        <div className="topBox">
+          <div
+            className={` ${
+              isBouncing ? "revealGameComplete" : "hiddenGameComplete"
+            }`}
+          >
+            Puzzle Complete!
+          </div>
         </div>
-      </ReactModal>
+        <div className={gameFinished ? "mainContentDisabled" : "mainContent"}>
+          <Grid
+            updateCounter={updateCounter}
+            boxCount={boxCount}
+            rowSum={getRowSum}
+            endGame={() => {
+              setGameFinished(true);
+              openModal();
+            }}
+          />
+          <RowCount inputRowSum={newRowSum}></RowCount>
+        </div>
+        <div className="bottomBox">
+          <div className="playerScore">
+            <Counter counter={boxCount} />
+          </div>
 
-      <div className={gameFinished ? "mainContentDisabled" : "mainContent"}>
-        <Grid
-          updateCounter={updateCounter}
-          boxCount={boxCount}
-          rowSum={getRowSum}
-          endGame={() => {
-            setGameFinished(true);
-            openModal();
-          }}
-        />
-        <RowCount inputRowSum={newRowSum}></RowCount>
+          <div className="pastScores">
+            <div>Daily Average {averageScore} </div>
+            <div>Daily Best: {bestScore}</div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import "../App";
 import cloneDeep from "lodash.clonedeep";
 import GridGenerator from "./GridGenerator";
 import { e } from "mathjs";
+
 // Represents a 10 x 18 grid of grid squares
 
 export default function Grid(props) {
@@ -50,8 +51,8 @@ export default function Grid(props) {
     try {
       const response = await fetch("http://localhost:4000/api/gridGen");
       const data = await response.json();
-      console.log("grid:", data.grid2);
-      return data.grid2;
+      console.log("grid:", data.grid);
+      return data.grid;
     } catch (error) {
       console.error("Error fetching grid:", error);
     }
@@ -237,7 +238,6 @@ export default function Grid(props) {
     var newGrid = GridGenerator();
     var colCount = 0;
     var colCountArray = [];
-    var tempGrid;
     var loadedGrid2 = [];
     var tempLoadedGrid2 = loadStateFromLocalStorage("grid");
     tempGrid = cloneDeep(grid);
