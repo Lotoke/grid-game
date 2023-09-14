@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import BounceElement from "./components/bounce";
 import TopNavBar from "./components/TopNavBar";
 import ReactModal from "react-modal";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShare, faShareFromSquare } from "@fortawesome/free-solid-svg-icons";
 function App() {
   const saveStateToLocalStorage = (ref, state) => {
     try {
@@ -39,7 +41,8 @@ function App() {
   const [averageScore, setAverageScore] = useState(0);
 
   const [isBouncing, setIsBouncing] = useState(false);
-
+  const [isClipVisible, setIsClipVisible] = useState(false);
+  const [isShareBouncing, setIsShareBouncing] = useState(false);
   //var newRowSum;
   var count = 0;
   var loaded = false;
@@ -51,6 +54,30 @@ function App() {
     // setTimeout(() => {
     //setIsBouncing(false);
     // }, 600); // 0.6 seconds, which matches the animation duration
+  };
+
+  const handleShare = () => {
+    setIsShareBouncing(true);
+    setIsClipVisible(true);
+
+    navigator.clipboard.writeText(
+      "GridLinker🟪⬜\n          ⬜🟪\n" +
+        inputValue +
+        "'s Score:" +
+        boxCount +
+        "\nToday's Lowest Score: " +
+        bestScore +
+        "\nPlay Now: http://localhost:3000/"
+    );
+
+    // Remove the bounce class after the animation is complete
+    setTimeout(() => {
+      setIsShareBouncing(false);
+    }, 600); // 0.6 seconds, which matches the animation duration
+
+    setTimeout(() => {
+      setIsClipVisible(false);
+    }, 1000); // Adjust the duration of the fade
   };
 
   const updateCounter = (val) => {
@@ -136,37 +163,54 @@ function App() {
       <div>
         <TopNavBar />
       </div>
-      <div>
+      <div className="game">
         <ReactModal className="endGameStats" isOpen={gameStatModalStatus}>
           <div>
             <button className="closeButton" onClick={() => closeModal()}>
               &times;
             </button>
-            <Counter counter={boxCount} />
-            <div> Daily Average Score {averageScore}</div>
-            <div> Daily Best Score: {bestScore}</div>
+            <div className="modalText1">Your Score: {boxCount}</div>
+            <div className="modalText2">Daily Average Score {averageScore}</div>
+            <div className="modalText2"> Daily Best Score: {bestScore}</div>
+
             <form>
-              <label>
-                Name:
-                <input
-                  type="text"
-                  value={inputValue}
-                  onChange={handleInputChange}
-                />
-                <button onClick={() => closeModal()}>Submit</button>
-              </label>
+              <input
+                className="modalText4"
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="Enter Username"
+              />
+              <button
+                type="button"
+                className={
+                  isShareBouncing ? "shareButtonBounce" : "shareButton"
+                }
+                onClick={() => handleShare()}
+              >
+                <FontAwesomeIcon icon={faShareFromSquare} />
+                {" Share"}
+              </button>
             </form>
+            {isClipVisible && (
+              <div className="fadeInOut">Copied to Clipboard</div>
+            )}
           </div>
         </ReactModal>
-        <div className="topBox">
-          <div
-            className={` ${
-              isBouncing ? "revealGameComplete" : "hiddenGameComplete"
-            }`}
-          >
-            Puzzle Complete!
-          </div>
+
+        <div
+          className={` ${
+            isBouncing ? "revealGameComplete" : "hiddenGameComplete"
+          }`}
+        >
+          {"Puzzle Complete!"}
         </div>
+        <div className="topBox">
+          <div className="playerScore">Score:</div>
+          <Counter counter={boxCount} />
+          <div className="playerScore2">Lower is better...</div>
+        </div>
+
         <div className={gameFinished ? "mainContentDisabled" : "mainContent"}>
           <Grid
             updateCounter={updateCounter}
@@ -180,14 +224,8 @@ function App() {
           <RowCount inputRowSum={newRowSum}></RowCount>
         </div>
         <div className="bottomBox">
-          <div className="playerScore">
-            <Counter counter={boxCount} />
-          </div>
-
-          <div className="pastScores">
-            <div>Daily Average {averageScore} </div>
-            <div>Daily Best: {bestScore}</div>
-          </div>
+          <div className="pastScores">Daily Average: {averageScore} </div>
+          <div className="pastScores">Daily Lowest: {bestScore}</div>
         </div>
       </div>
     </div>

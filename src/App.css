@@ -57,6 +57,19 @@
     transform: scale(1.2);
   }
 }
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .hiddenBox:hover {
   transform: scale(1.2); /* Scale up on hover */
 }
@@ -76,12 +89,19 @@
 .revealGameComplete {
   visibility: visible;
   animation: expandAndRetract 0.5s ease;
-  font-size: x-large;
+  font-size: xx-large;
   font-family: "Comfortaa";
+  margin-top: 80px;
+  margin-bottom: 30px;
+  padding-left: 55px;
 }
 
 .hiddenGameComplete {
+  font-size: xx-large;
+  font-family: "Comfortaa";
   visibility: hidden;
+  margin-top: 80px;
+  margin-bottom: 30px;
 }
 .App-header {
   background-color: #282c34;
@@ -115,6 +135,8 @@
   border-radius: 6px;
   font-size: 20px;
   transition: transform 0.3s ease;
+  font-size: medium;
+  font-family: "Comfortaa";
 }
 .selectedBox {
   display: flex;
@@ -125,6 +147,8 @@
   width: 55px;
   border-radius: 6px;
   font-size: 20px;
+  font-size: medium;
+  font-family: "Comfortaa";
 }
 .selectedBoxOutline {
   display: flex;
@@ -138,6 +162,8 @@
   border-radius: 6px;
   border-color: blueviolet;
   font-size: 20px;
+  font-size: medium;
+  font-family: "Comfortaa";
 }
 .rowCountBox {
   display: flex;
@@ -148,6 +174,8 @@
   width: 90px;
   border-radius: 6px;
   font-size: 20px;
+  font-size: medium;
+  font-family: "Comfortaa";
 }
 
 .App {
@@ -192,8 +220,7 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(197, 161, 230);
-  justify-content: center;
-  align-items: center;
+
   height: 45px;
   width: 385px;
   border-width: 5px;
@@ -201,7 +228,6 @@
   border-radius: 6px;
   border-color: rgb(197, 161, 230);
   font-size: 20px;
-  margin-top: 100px;
 }
 .bottomBox {
   display: flex;
@@ -220,12 +246,46 @@
 .playerScore {
   font-size: x-large;
   font-family: "Comfortaa";
-
-  margin-right: 100px;
 }
-.pastScores {
+.scoreBox {
+  display: flex;
+  background-color: blueviolet;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 6px;
+  margin-left: 4px;
+  margin-right: 6px;
   font-size: medium;
   font-family: "Comfortaa";
+}
+
+.bounceScoreBox {
+  display: flex;
+  background-color: blueviolet;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 6px;
+  margin-left: 4px;
+  margin-right: 6px;
+  font-size: medium;
+  font-family: "Comfortaa";
+  animation: expandAndRetract 0.5s ease;
+}
+
+.playerScore2 {
+  font-size: small;
+  font-family: "Comfortaa";
+}
+
+.pastScores {
+  font-size: large;
+  font-family: "Comfortaa";
+  padding-left: 10px;
+  padding-right: 10px;
 }
 .endPuzzleText {
   font-size: x-large;
@@ -233,18 +293,87 @@
 }
 .endGameStats {
   display: flex;
-  align-items: center;
+  align-items: top;
   justify-content: center;
   position: fixed;
-  top: 30%; /* Center vertically */
+  top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
   transform: translate(-50%, -50%); /* Adjust to center the modal properly */
-  width: 30%;
-  height: 30%;
+  width: 400px;
+  height: 250px;
   background-color: white;
+
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  padding-top: 50px;
 }
 
+.modalText1 {
+  font-size: xx-large;
+  font-family: "Comfortaa";
+  color: blueviolet;
+  margin-bottom: 40px;
+  padding-bottom: 5px;
+  border-bottom: #282c34;
+  border-width: 2px;
+  border-bottom-style: solid;
+}
+.modalText2 {
+  font-size: medium;
+  font-family: "Comfortaa";
+  padding-bottom: 5px;
+}
+.modalText3 {
+  font-size: medium;
+  font-family: "Comfortaa";
+  padding-bottom: 5px;
+}
+.modalText4 {
+  font-size: medium;
+  font-family: "Comfortaa";
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 3px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-color: #333;
+  align-items: center;
+  justify-content: center;
+}
+.shareButtonBounce {
+  font-size: small;
+  font-family: "Comfortaa";
+  border-width: 2px;
+  border-style: solid;
+  color: #333;
+  border-radius: 3px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-color: bisque;
+  background-color: bisque;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  margin-top: 10px;
+  animation: expandAndRetract 0.5s ease;
+}
+
+.shareButton {
+  font-size: small;
+  font-family: "Comfortaa";
+  border-width: 2px;
+  border-style: solid;
+  color: #333;
+  border-radius: 3px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  border-color: bisque;
+  background-color: bisque;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  margin-top: 10px;
+  cursor: pointer;
+}
 .closeButton {
   position: absolute; /* Position the button absolutely within the modal content */
   top: 10px;
@@ -255,6 +384,26 @@
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
+}
+.fadeInOut {
+  opacity: 0;
+  font-size: small;
+  font-family: "Comfortaa";
+  border-width: 2px;
+  border-style: solid;
+  color: #ffffff;
+  border-radius: 3px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 65px;
+  border-color: #333;
+  background-color: #333;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 10px;
+
+  animation: fadeInOut 1s ease-in-out forwards;
 }
 
 .main {
