@@ -49,7 +49,9 @@ export default function Grid(props) {
 
   const fetchGeneratedGrid = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/gridGen");
+      const response = await fetch(
+        "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/gridGen"
+      );
       const data = await response.json();
       console.log("grid:", data.grid);
       return data.grid;

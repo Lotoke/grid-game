@@ -115,17 +115,20 @@ function App() {
   };
 
   const submitScore = async () => {
-    const response = await fetch("http://localhost:4000/api/scores", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        playerName: inputValue,
-        score: count,
-        timestamp: new Date().toISOString(),
-      }),
-    });
+    const response = await fetch(
+      "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/scores",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerName: inputValue,
+          score: count,
+          timestamp: new Date().toISOString(),
+        }),
+      }
+    );
 
     if (response.ok) {
       const responseData = await response.json(); // Parse the JSON response
@@ -135,7 +138,9 @@ function App() {
 
   const fetchAverageScore = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/meanScore");
+      const response = await fetch(
+        "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/meanScore"
+      );
       const data = await response.json();
       setAverageScore(data.meanScore);
     } catch (error) {
@@ -145,7 +150,9 @@ function App() {
 
   const fetchBestScore = async () => {
     try {
-      const response = await fetch("http://localhost:4000/api/bestScore");
+      const response = await fetch(
+        "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/bestScore"
+      );
       const data = await response.json();
       setBestScore(data.bestScore);
       tempBestScore = data.bestScore;
