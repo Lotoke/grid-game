@@ -43,10 +43,11 @@ function App() {
   const [isBouncing, setIsBouncing] = useState(false);
   const [isClipVisible, setIsClipVisible] = useState(false);
   const [isShareBouncing, setIsShareBouncing] = useState(false);
+  const [isBestScore, setIsBestScore] = useState(false);
   //var newRowSum;
   var count = 0;
   var loaded = false;
-
+  var tempBestScore = 0;
   const handleBounceEffect = () => {
     setIsBouncing(true);
 
@@ -92,13 +93,18 @@ function App() {
 
   const closeModal = () => {
     setGameStatModalStatus(false);
-    submitScore();
-    fetchBestScore();
-    fetchAverageScore();
   };
 
   const openModal = () => {
     handleBounceEffect();
+    console.log(tempBestScore);
+    if (count < tempBestScore) {
+      setIsBestScore(true);
+    }
+
+    submitScore();
+    fetchBestScore();
+    fetchAverageScore();
 
     setTimeout(() => {
       setGameStatModalStatus(true);
@@ -116,7 +122,7 @@ function App() {
       },
       body: JSON.stringify({
         playerName: inputValue,
-        score: boxCount,
+        score: count,
         timestamp: new Date().toISOString(),
       }),
     });
@@ -131,7 +137,6 @@ function App() {
     try {
       const response = await fetch("http://localhost:4000/api/meanScore");
       const data = await response.json();
-      console.log("Best Score:", data.meanScore);
       setAverageScore(data.meanScore);
     } catch (error) {
       console.error("Error fetching highest score:", error);
@@ -142,8 +147,8 @@ function App() {
     try {
       const response = await fetch("http://localhost:4000/api/bestScore");
       const data = await response.json();
-      console.log("Best Score:", data.bestScore);
       setBestScore(data.bestScore);
+      tempBestScore = data.bestScore;
     } catch (error) {
       console.error("Error fetching highest score:", error);
     }
@@ -170,6 +175,9 @@ function App() {
               &times;
             </button>
             <div className="modalText1">Your Score: {boxCount}</div>
+            <div className={isBestScore ? "highScore" : "highScoreHidden"}>
+              New Low Score!
+            </div>
             <div className="modalText2">Daily Average Score {averageScore}</div>
             <div className="modalText2"> Daily Best Score: {bestScore}</div>
 
@@ -218,12 +226,20 @@ function App() {
             rowSum={getRowSum}
             endGame={() => {
               setGameFinished(true);
+              console.log(bestScore);
               openModal();
             }}
           />
           <RowCount inputRowSum={newRowSum}></RowCount>
         </div>
-        <div className="bottomBox">
+        <div
+          className={gameFinished ? "bottomBoxButton" : "bottomBox"}
+          onClick={() => {
+            if (gameFinished) {
+              setGameStatModalStatus(true);
+            }
+          }}
+        >
           <div className="pastScores">Daily Average: {averageScore} </div>
           <div className="pastScores">Daily Lowest: {bestScore}</div>
         </div>

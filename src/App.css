@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap");
 
 .App {
   text-align: center;
@@ -80,6 +80,9 @@
 
 .helpButton:hover {
   transform: scale(1.2); /* Scale up on hover */
+}
+.bottomBoxButton:hover {
+  transform: scale(1.05); /* Scale up on hover */
 }
 
 .expand-retract {
@@ -243,9 +246,26 @@
   border-color: rgb(197, 161, 230);
   font-size: 20px;
 }
+.bottomBoxButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(197, 161, 230);
+
+  height: 45px;
+  width: 385px;
+  border-width: 5px;
+  border-style: solid;
+  border-radius: 6px;
+  border-color: rgb(197, 161, 230);
+  font-size: 20px;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
 .playerScore {
   font-size: x-large;
   font-family: "Comfortaa";
+  font-weight: bold;
 }
 .scoreBox {
   display: flex;
@@ -279,11 +299,13 @@
 .playerScore2 {
   font-size: small;
   font-family: "Comfortaa";
+  font-weight: 600;
 }
 
 .pastScores {
   font-size: large;
   font-family: "Comfortaa";
+  font-weight: 900;
   padding-left: 10px;
   padding-right: 10px;
 }
@@ -306,12 +328,54 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   padding-top: 50px;
 }
+.tutorial {
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+  position: fixed;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Adjust to center the modal properly */
+  width: 450px;
+  height: 300px;
+  background-color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  padding-top: 50px;
+  padding-left: 0px;
+  padding-right: 30px;
+  padding-bottom: 50px;
+}
+.video {
+  margin-left: 20px;
+  margin-top: 0px;
+}
 
+.scoreText {
+  font-size: large;
+  font-family: "Comfortaa";
+  font-weight: bold;
+}
+.highScore {
+  font-size: x-large;
+  font-family: "Comfortaa";
+  font-weight: 900;
+  color: goldenrod;
+  margin-bottom: 15px;
+}
+.highScoreHidden {
+  visibility: hidden;
+  font-size: small;
+  font-family: "Comfortaa";
+  font-weight: 900;
+  margin-bottom: 15px;
+  color: rgb(70, 51, 4);
+}
 .modalText1 {
   font-size: xx-large;
   font-family: "Comfortaa";
+  font-weight: 900;
   color: blueviolet;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   padding-bottom: 5px;
   border-bottom: #282c34;
   border-width: 2px;
@@ -323,10 +387,11 @@
   padding-bottom: 5px;
 }
 .modalText3 {
-  font-size: medium;
+  font-size: 14px;
   font-family: "Comfortaa";
   padding-bottom: 5px;
 }
+
 .modalText4 {
   font-size: medium;
   font-family: "Comfortaa";
@@ -335,9 +400,24 @@
   border-radius: 3px;
   padding-top: 5px;
   padding-bottom: 5px;
+  margin-top: 30px;
   border-color: #333;
   align-items: center;
   justify-content: center;
+}
+
+.modalText1Tut {
+  font-size: xx-large;
+  font-family: "Comfortaa";
+  color: blueviolet;
+  margin-bottom: 25px;
+  padding-bottom: 5px;
+  border-bottom: #282c34;
+  border-width: 2px;
+  border-bottom-style: solid;
+  margin-left: 20px;
+  padding-left: 15px;
+  font-weight: 900;
 }
 .shareButtonBounce {
   font-size: small;
@@ -472,6 +552,7 @@
 .logoText1 {
   font-size: xx-large;
   font-family: "Comfortaa";
+  font-weight: 900;
   justify-content: center;
   align-items: center;
   align-self: center;
@@ -480,6 +561,7 @@
 .logoText2 {
   font-size: xx-large;
   font-family: "Comfortaa";
+  font-weight: 900;
   justify-content: center;
   align-items: center;
   align-self: center;
