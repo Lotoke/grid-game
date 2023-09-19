@@ -48,6 +48,7 @@ function App() {
   var count = 0;
   var loaded = false;
   var tempBestScore = 0;
+  var initDay;
   const handleBounceEffect = () => {
     setIsBouncing(true);
 
@@ -115,20 +116,17 @@ function App() {
   };
 
   const submitScore = async () => {
-    const response = await fetch(
-      "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/scores",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          playerName: inputValue,
-          score: count,
-          timestamp: new Date().toISOString(),
-        }),
-      }
-    );
+    const response = await fetch("http://35.214.232.194:4000/api/scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        playerName: inputValue,
+        score: count,
+        timestamp: new Date().toISOString(),
+      }),
+    });
 
     if (response.ok) {
       const responseData = await response.json(); // Parse the JSON response
@@ -138,9 +136,7 @@ function App() {
 
   const fetchAverageScore = async () => {
     try {
-      const response = await fetch(
-        "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/meanScore"
-      );
+      const response = await fetch("http://35.214.232.194:4000/api/meanScore");
       const data = await response.json();
       setAverageScore(data.meanScore);
     } catch (error) {
@@ -150,9 +146,7 @@ function App() {
 
   const fetchBestScore = async () => {
     try {
-      const response = await fetch(
-        "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/bestScore"
-      );
+      const response = await fetch("http://35.214.232.194:4000/api/bestScore");
       const data = await response.json();
       setBestScore(data.bestScore);
       tempBestScore = data.bestScore;
@@ -161,13 +155,36 @@ function App() {
     }
   };
 
+  const fetchDaySinceInit = async () => {
+    try {
+      const response = await fetch("http://35.214.232.194:4000/api/day");
+      const data = await response.json();
+      initDay = data.day;
+    } catch (error) {
+      console.error("Error fetching highest day:", error);
+    }
+  };
+
   useEffect(() => {
     if (loadStateFromLocalStorage("score") != undefined) {
       count = loadStateFromLocalStorage("score");
       setBoxCount(count);
     }
-    fetchAverageScore();
-    fetchBestScore();
+    setGameFinished(loadStateFromLocalStorage("disableGame"));
+
+    fetchDaySinceInit().then(() => {
+      if (initDay > loadStateFromLocalStorage("initDay")) {
+        console.log(loadStateFromLocalStorage("initDay"));
+        localStorage.clear();
+      }
+      console.log(initDay);
+
+      saveStateToLocalStorage("initDay", initDay);
+
+      //console.log(loadStateFromLocalStorage(initDay));
+      fetchAverageScore();
+      fetchBestScore();
+    });
   });
 
   return (
@@ -233,7 +250,8 @@ function App() {
             rowSum={getRowSum}
             endGame={() => {
               setGameFinished(true);
-              console.log(bestScore);
+              saveStateToLocalStorage("disableGame", true);
+
               openModal();
             }}
           />

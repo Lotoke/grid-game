@@ -49,9 +49,7 @@ export default function Grid(props) {
 
   const fetchGeneratedGrid = async () => {
     try {
-      const response = await fetch(
-        "https://us-central1-gridlinker-8e148.cloudfunctions.net/myHttpFunction/api/gridGen"
-      );
+      const response = await fetch("http://35.214.232.194:4000/api/gridGen");
       const data = await response.json();
       console.log("grid:", data.grid);
       return data.grid;
@@ -415,7 +413,7 @@ export default function Grid(props) {
     saveStateToLocalStorage("grid", tempGrid);
     if (linked == true) {
       props.endGame();
-      localStorage.clear();
+      //localStorage.clear();
     }
 
     //console.log(gridIn[row][col]);
