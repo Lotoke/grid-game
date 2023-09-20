@@ -69,7 +69,7 @@ function App() {
         boxCount +
         "\nToday's Lowest Score: " +
         bestScore +
-        "\nPlay Now: http://localhost:3000/"
+        "\nPlay Now: https://gridlinker.web.app/"
     );
 
     // Remove the bounce class after the animation is complete
@@ -116,17 +116,20 @@ function App() {
   };
 
   const submitScore = async () => {
-    const response = await fetch("http://35.214.232.194:4000/api/scores", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        playerName: inputValue,
-        score: count,
-        timestamp: new Date().toISOString(),
-      }),
-    });
+    const response = await fetch(
+      "https://gridlinker-8e148.ew.r.appspot.com/api/scores",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerName: inputValue,
+          score: count,
+          timestamp: new Date().toISOString(),
+        }),
+      }
+    );
 
     if (response.ok) {
       const responseData = await response.json(); // Parse the JSON response
@@ -136,7 +139,9 @@ function App() {
 
   const fetchAverageScore = async () => {
     try {
-      const response = await fetch("http://35.214.232.194:4000/api/meanScore");
+      const response = await fetch(
+        "https://gridlinker-8e148.ew.r.appspot.com/api/meanScore"
+      );
       const data = await response.json();
       setAverageScore(data.meanScore);
     } catch (error) {
@@ -146,7 +151,9 @@ function App() {
 
   const fetchBestScore = async () => {
     try {
-      const response = await fetch("http://35.214.232.194:4000/api/bestScore");
+      const response = await fetch(
+        "https://gridlinker-8e148.ew.r.appspot.com/api/bestScore"
+      );
       const data = await response.json();
       setBestScore(data.bestScore);
       tempBestScore = data.bestScore;
@@ -157,7 +164,9 @@ function App() {
 
   const fetchDaySinceInit = async () => {
     try {
-      const response = await fetch("http://35.214.232.194:4000/api/day");
+      const response = await fetch(
+        "https://gridlinker-8e148.ew.r.appspot.com/api/day"
+      );
       const data = await response.json();
       initDay = data.day;
     } catch (error) {
