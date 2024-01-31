@@ -126,7 +126,7 @@ function App() {
         body: JSON.stringify({
           playerName: inputValue,
           score: count,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().getDay().toString(),
         }),
       }
     );
@@ -182,12 +182,16 @@ function App() {
     setGameFinished(loadStateFromLocalStorage("disableGame"));
 
     fetchDaySinceInit().then(() => {
-      if (initDay > loadStateFromLocalStorage("initDay")) {
-        console.log(loadStateFromLocalStorage("initDay"));
+      if (
+        initDay != loadStateFromLocalStorage("initDay") &&
+        initDay != undefined
+      ) {
         localStorage.clear();
       }
+      console.log("test");
       console.log(initDay);
-
+      console.log(loadStateFromLocalStorage("initDay"));
+      console.log();
       saveStateToLocalStorage("initDay", initDay);
 
       //console.log(loadStateFromLocalStorage(initDay));
@@ -198,9 +202,8 @@ function App() {
 
   return (
     <div className="main">
-      <div>
-        <TopNavBar />
-      </div>
+      <TopNavBar />
+
       <div className="game">
         <ReactModal className="endGameStats" isOpen={gameStatModalStatus}>
           <div>

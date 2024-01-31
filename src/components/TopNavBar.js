@@ -56,8 +56,12 @@ function TopNavBar() {
                 as possible.
               </li>
               <li style={{ paddingBottom: "7px" }}>
+                The
+                <b> rightmost</b> column🟨 shows the total score of each row
+              </li>
+              <li style={{ paddingBottom: "7px" }}>
                 The game resets every 24h🕛,
-                <b>try to beat the lowest daily score!</b>
+                <b> try to beat the lowest daily score!</b>
               </li>
             </ul>
           </div>

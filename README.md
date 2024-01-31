@@ -1,70 +1,32 @@
-# Getting Started with Create React App
+GridLinker:
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Gridlinker is a web puzzle game developed with react.js, developed as a personal project to improve my react.js and javascript knowledge.
+The game can be played here: https://gridlinker.web.app/
 
-## Available Scripts
+How to play:
+-The game consists of a grid of boxes containing (hidden) random numbers
+-When a box is selected the number in the box is added to the score, and the numbers in the surrounding boxes are revealed
+-The aim of the game is to select boxes to draw a path from the top of the grid to the bottom with the lowest possible score
+-All players are given the same grid, which resets daily, and can compare their scores on a global leaderboard
 
-In the project directory, you can run:
+This repo contains the frontend for gridLinker. GridLinker is deployed as a firebase app.
 
-### `npm start`
+Dependencies:
+"@fortawesome/free-solid-svg-icons": "^6.4.2",
+"@fortawesome/react-fontawesome": "^0.2.0",
+"@testing-library/jest-dom": "^5.16.3",
+"@testing-library/react": "^12.1.4",
+"@testing-library/user-event": "^13.5.0",
+"firebase": "^10.4.0",
+"lodash": "^4.17.21",
+"lodash.clonedeep": "^4.5.0",
+"mathjs": "^10.4.2",
+"react": "^18.0.0",
+"react-dom": "^18.0.0",
+"react-modal": "^3.16.1",
+"react-scripts": "5.0.0",
+"reactjs-modal": "^4.0.0",
+"reactjs-popup": "^2.0.5",
+"web-vitals": "^2.1.4"
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+See \_\_\_ for backend server, which handles grid number generation and player scores
